@@ -1,0 +1,84 @@
+---
+title: "OKC Thunder Assessment"
+author: "Jacob Bulling"
+date: "11/5/2021"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+shots_data <-read_csv("C:/Users/jakeb/Downloads/shots_data.csv")
+# Separating team a and team b
+
+Team_a <- shots_data %>%
+  filter(team == "Team A")
+Team_b <- shots_data %>%
+  filter(team == "Team B")
+```
+
+```{r}
+
+# Separate the two point shots from the 3pt shots. and calculate the eFG.  
+team_a_twos <- Team_a %>%
+  filter(abs(y) <=7.8 & abs(x) < 22 | abs(y)> 7.8 & abs(x) <23.75)
+
+efg_twos_a <- team_a_twos %>%
+  summarize(eFG = sum(fgmade/n()))
+
+#Separate the corner 3's and calculate. 
+team_a_corner <- Team_a %>%
+  filter(abs(y) <= 7.8 & abs(x) > 22.0)
+
+efg_corner_A <- team_a_corner %>%
+  summarize(EfG = (sum(fgmade) + 0.5*sum(fgmade))/n())
+
+# separate non corners and no need to calculate since there are no shots.
+team_a_noncorner <- Team_a %>%
+  filter(abs(y)> 7.8 & abs(x) >23.75)
+
+# Separate the two point shots from the 3pt shots. and calculate the eFG.  
+Team_b_twos <- Team_b %>%
+    filter(abs(y) <=7.8 & abs(x) < 22 | abs(y)> 7.8 & abs(x) <23.75)
+
+efg_twos_b <- Team_b_twos %>%
+  summarize(eFG = sum(fgmade/n()))
+
+
+#Separate the corner 3's and calculate. 
+
+Team_b_corner <- Team_b %>%
+    filter(abs(y) <= 7.8 & abs(x) > 22.0)
+
+efg_corner_b <- Team_b_corner %>%
+  summarize(eFG = (sum(fgmade) + 0.5*sum(fgmade))/n())
+
+# separate non corners and no need to calculate since there are no shots.
+
+Team_b_noncorner <- Team_b %>%
+  filter(abs(y)> 7.8 & abs(x) >23.75)
+
+
+
+
+
+efg_corner_A
+efg_twos_a
+efg_corner_b
+efg_twos_b
+
+#Calculate the distribution of where shots are. 
+
+Team_a_twos_dist <- 260/280
+team_a_corner_dist <- 20/280
+team_a_noncorner_dist <- 0
+
+team_b_twos_dist <- 259/280
+team_b_corner_dist <- 21/280
+team_b_noncorner_dist<- 0
+```
+
